@@ -16,7 +16,7 @@ build-db:
 setup-linux:
 	git clone --depth=1 git://kernel.ubuntu.com/ubuntu/linux.git $(linux)
 	make remove-makefile-escaped-newlines
-	cp $(linux)/debian/scripts/retpoline-extract-one $(linux)/scripts/ubuntu-retpoline-extract-one
+#	cp $(linux)/debian/scripts/retpoline-extract-one $(linux)/scripts/ubuntu-retpoline-extract-one
 
 setup-qemu:
 	-git clone --depth 1 -b stable-2.12 https://github.com/qemu/qemu.git
