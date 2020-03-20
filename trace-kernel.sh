@@ -1,5 +1,8 @@
 #!/bin/bash
 source constant.sh
+export cpu=4
+export mem=4000
+export workdir=/home/reeder/Desktop/Cozart/
 
 help() {
     echo "./trace-kernel.sh initProgram [local=true]"
@@ -15,6 +18,21 @@ trace-kernel() {
         awkoption=""
     fi
     make clean
+    echo "qemubin" $qemubin
+    echo "cores" $cores
+    echo "mem" $mem
+    echo "cpu" $cpu
+    echo "kernelbuild" $kernelbuild
+    echo "linux" $linux
+    echo "base" $base
+    echo "workdir" $workdir
+    echo "ls $kernelbuild/$linux/$base/base/vmlinux*"
+    ls $kernelbuild/$linux/$base/base/vmlinux*
+    echo ""
+
+    echo "ls $workdir/qemu-disk.ext4"
+    ls $workdir/qemu-disk.ext4
+    echo ""
     # rawtrace=$(mktemp --tmpdir=/tmp cozart-XXXXX)
     $qemubin -trace exec_tb_block -smp $cores -m $mem -cpu $cpu \
         -drive file="$workdir/qemu-disk.ext4,if=ide,format=raw" \
