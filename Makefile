@@ -90,11 +90,11 @@ install-docker:
 #	-sudo umount --recursive $(mnt)
 
 get-modules:
-#	-sudo umount --recursive $(mnt)
-#	sudo mount -o loop $(disk) $(mnt)
+	-sudo umount --recursive $(mnt)
+	sudo mount -o loop $(disk) $(mnt)
 	-sudo mv $(mnt)/lib/modules modules.tmp
 	sudo chown -R $(whoami):$(whoami) modules.tmp
-#	sudo umount --recursive $(mnt)
+	sudo umount --recursive $(mnt)
 
 sync-scripts:
 	./copy2disks.sh benchmark-scripts

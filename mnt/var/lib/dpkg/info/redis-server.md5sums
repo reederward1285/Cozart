@@ -1,6 +1,0 @@
-31ff386ae4d8b82746f6fc6e46b077d0  lib/systemd/system/redis-server.service
-e171f7b2018bc78c81d5f4dae82ca38f  lib/systemd/system/redis-server@.service
-a4453661a87c51dda2620d35ee2cd058  usr/share/doc/redis-server/MANIFESTO.gz
-647e27832bec5e56ad76f7402b008a8a  usr/share/doc/redis-server/README.md.gz
-376d74ab480d7ef2679dda20f9bf5fdb  usr/share/doc/redis-server/copyright
-78d0dd811ef085d68134665722fc5411  usr/share/man/man1/redis-server.1.gz
