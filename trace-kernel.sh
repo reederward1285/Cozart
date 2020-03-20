@@ -51,7 +51,7 @@ trace-kernel() {
         exit 1
     fi
 
-    make get-modules
+    #make get-modules
 	echo "Getting module config information..."
     cat modules.tmp | ./module2config.sh >module.config.tmp &
 
