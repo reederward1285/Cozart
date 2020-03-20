@@ -1,9 +1,11 @@
 #!/bin/bash
 source constant.sh
-export cpu=4
-export mem=4000
+export cpu=kvm64
+export mem=1000
 export workdir=/home/reeder/Desktop/Cozart/
-
+export cores=4
+export qemubin=/usr/local/bin/qemu-system-x86_64
+export base=cosmic
 help() {
     echo "./trace-kernel.sh initProgram [local=true]"
     echo "The third argument is for observe a local view."
@@ -26,6 +28,7 @@ trace-kernel() {
     echo "linux" $linux
     echo "base" $base
     echo "workdir" $workdir
+    echo "awkoption" $awkoption
     echo "ls $kernelbuild/$linux/$base/base/vmlinux*"
     ls $kernelbuild/$linux/$base/base/vmlinux*
     echo ""
@@ -36,7 +39,7 @@ trace-kernel() {
     # rawtrace=$(mktemp --tmpdir=/tmp cozart-XXXXX)
     $qemubin -trace exec_tb_block -smp $cores -m $mem -cpu $cpu \
         -drive file="$workdir/qemu-disk.ext4,if=ide,format=raw" \
-        -kernel $kernelbuild/$linux/$base/base/vmlinuz* -nographic -no-reboot \
+        -kernel $kernelbuild/$linux/$base/base/vmlinuz-4.18.20-linux-cosmic-cosmic-base -nographic -no-reboot \
         -append "nokaslr panic=-1 console=ttyS0 root=/dev/sda rw init=$1" \
         3>&1 1>trace-stdout.tmp 2>&3 | awk $awkoption --file extract-trace.awk > unsorted-trace.tmp
 
