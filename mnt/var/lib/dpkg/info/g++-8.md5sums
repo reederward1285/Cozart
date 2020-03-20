@@ -1,0 +1,6 @@
+6b90dd566b499f4d13596df60856e0bd  usr/bin/x86_64-linux-gnu-g++-8
+295c792397c4d0d1fe83c0298e2499c0  usr/lib/gcc/x86_64-linux-gnu/8/cc1plus
+d34e924e0b649f39a4c876c1a4ec4e1f  usr/share/doc/gcc-8-base/C++/README.C++
+a4c8f1399be31541a713c8129a5bcab8  usr/share/doc/gcc-8-base/C++/changelog.gz
+3d8a7ed0259671c951c746f2d7b39be5  usr/share/lintian/overrides/g++-8
+7719c600e86aefeb67531cc117259419  usr/share/man/man1/x86_64-linux-gnu-g++-8.1.gz

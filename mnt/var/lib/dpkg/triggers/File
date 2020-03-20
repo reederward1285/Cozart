@@ -1,0 +1,15 @@
+/usr/lib/systemd/catalog systemd/noawait
+/etc/init.d systemd/noawait
+/etc/dbus-1/system.d dbus/noawait
+/usr/share/dbus-1/system.d dbus/noawait
+/usr/share/dbus-1/system-services dbus/noawait
+/etc/php/7.2/apache2/conf.d libapache2-mod-php7.2/noawait
+/usr/lib/x86_64-linux-gnu/gio/modules libglib2.0-0:amd64/noawait
+/usr/lib/gio/modules libglib2.0-0:amd64/noawait
+/usr/share/glib-2.0/schemas libglib2.0-0:amd64
+/usr/lib/mime/packages mime-support/noawait
+/usr/share/applications mime-support/noawait
+/etc/php/7.2/cli/conf.d php7.2-cli/noawait
+/etc/rsyslog.d rsyslog/noawait
+/usr/share/mime/packages shared-mime-info/noawait
+/lib/udev/hwdb.d udev/noawait

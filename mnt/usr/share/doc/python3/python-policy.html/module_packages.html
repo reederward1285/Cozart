@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 2. Packaged Modules</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Debian Python Policy" /><link rel="up" href="index.html" title="Debian Python Policy" /><link rel="prev" href="python.html" title="Chapter 1. Python Packaging" /><link rel="next" href="programs.html" title="Chapter 3. Python Programs" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. Packaged Modules</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="python.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="programs.html">Next</a></td></tr></table><hr /></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="module_packages"></a>Chapter 2. Packaged Modules</h1></div></div></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="module_packages.html#idm151">2.1. Types of Python Modules</a></span></dt><dt><span class="section"><a href="module_packages.html#package_names">2.2. Module Package Names</a></span></dt><dt><span class="section"><a href="module_packages.html#specifying_versions">2.3. Specifying Supported Versions</a></span></dt><dt><span class="section"><a href="module_packages.html#dependencies">2.4. Dependencies</a></span></dt><dt><span class="section"><a href="module_packages.html#provides">2.5. Provides</a></span></dt><dt><span class="section"><a href="module_packages.html#bytecompilation">2.6. Modules Bytecompilation</a></span></dt></dl></div><p>
+	The goal of these policies is to reduce the work necessary for
+	Python transitions. Python modules are internally very
+	dependent on a specific Python version. However, we want to
+	automate recompiling modules when possible, either during the
+	upgrade itself (re-bytecompiling pyc and pyo files) or shortly
+	thereafter with automated rebuilds (to handle C
+	extensions). These policies encourage automated dependency
+	generation and loose version bounds whenever possible.
+	</p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="idm151"></a>2.1. Types of Python Modules</h2></div></div></div><p>
+	  There are two kinds of Python modules, "pure" Python
+	  modules, and extension modules. Pure Python modules are
+	  Python source code that works across many versions of
+	  Python. Extensions are C code compiled and linked against a
+	  specific version of the libpython library, and so can only
+	  be used by one version of Python.
+	</p><p>
+          Python packages are directories containing at least a
+          <code class="filename">__init__.py</code>, other modules, extensions and
+          packages (A package in the Python sense is unrelated to a
+          Debian package). Python packages must be packaged into the
+          same directory (as done by upstream). Splitting components
+          of a package across directories changes the import order and
+          may confuse documentation tools and IDEs.
+	</p><p>
+	  There are two ways to distribute Python modules. Public
+	  modules are installed in one of the directories listed
+	  in <a class="xref" href="python.html#paths" title="1.4. Module Path">Section 1.4, “Module Path”</a>. They are accessible to any
+	  program. Private modules are installed in a directory such
+	  as <code class="filename">/usr/share/<em class="replaceable"><code>packagename</code></em></code>
+	  or <code class="filename">/usr/lib/<em class="replaceable"><code>packagename</code></em></code>. They are
+	  generally only accessible to a specific program or suite of
+	  programs included in the same package.
+	</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="package_names"></a>2.2. Module Package Names</h2></div></div></div><p>
+	  Public modules should be packaged with a name
+	  of <code class="literal">python-<em class="replaceable"><code>foo</code></em></code>,
+	  where <em class="replaceable"><code>foo</code></em> is the name of the module. Such a
+	  package should support the current Debian Python version,
+	  and more if possible (there are several tools to help
+	  implement this, see <a class="xref" href="packaging_tools.html" title="Appendix B. Packaging Tools">Appendix B, <em>Packaging Tools</em></a>). For
+	  example, if Python 2.3, 2.4, and 2.5 are supported, the
+	  Python command
+	  </p><pre class="programlisting">
+import foo
+	  </pre><p>
+	  should import the module when the user is running any
+	  of <code class="filename">/usr/bin/python2.3</code>, <code class="filename">/usr/bin/python2.4</code>,
+	  and <code class="filename">/usr/bin/python2.5</code>. This requirement also
+	  applies to extension modules; binaries for all the supported
+	  Python versions should be included in a single package.
+	</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="specifying_versions"></a>2.3. Specifying Supported Versions</h2></div></div></div><p>
+	  The <code class="literal">XS-Python-Version</code> field
+	  in <code class="filename">debian/control</code> specifies the versions of
+	  Python supported by the package. This is used to track
+	  packages during Python transitions, and is also used by some
+	  packaging scripts to automatically generate appropriate
+	  Depends and Provides lines. The format of the field may be
+	  one of the following:
+	  </p><pre class="programlisting">
+XS-Python-Version: all
+XS-Python-Version: current
+XS-Python-Version: current, &gt;= X.Y
+XS-Python-Version: &gt;= X.Y
+XS-Python-Version: &gt;= A.B, &lt;&lt; X.Y
+XS-Python-Version: A.B, X.Y
+	  </pre><p>
+	  Where "all" means the package supports any Python version
+	  available, and "current" means it supports Debian's current
+	  Python version. Explicit Versions or version ranges can also
+	  be used.
+	</p><p>
+	  Your control file should also have a line:
+	  </p><pre class="programlisting">
+XB-Python-Version: ${python:Versions}
+	  </pre><p>
+	  The python:Versions is substituted by the supported Python
+	  versions of the binary package, based on
+	  <code class="literal">XS-Python-Version</code>. (If you are not using
+	  <code class="filename">dh_python</code> you will need to handle this
+	  substitution yourself.) The format of the field
+	  <code class="literal">XB-Python-Version</code> is the same as the
+	  <code class="literal">XS-Python-Version</code> field for packages not containing
+	  extensions. Packages with extensions must list the versions
+	  explicitely.
+	</p><p>
+	  If your package is used by another module or application
+	  that requires a specific Python version, it should also
+	  <code class="literal">Provide: python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>-foo</code> for
+	  each version it supports.
+	</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="dependencies"></a>2.4. Dependencies</h2></div></div></div><p>
+	  Packaged modules available for the default Python version
+	  (or many versions including the default) as described
+	  in <a class="xref" href="module_packages.html#package_names" title="2.2. Module Package Names">Section 2.2, “Module Package Names”</a> must depend on "<code class="literal">python
+	  (&gt;= <em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em></code>)". If they
+	  require other modules to work, they must depend on the
+	  corresponding <code class="literal">python-foo</code>. They must not
+	  depend on
+	  any <code class="literal">python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>-foo</code>.
+	</p><p>
+	  Packaged modules available for one particular version of Python must
+	  depend on the corresponding
+	  <code class="literal">python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em></code> package instead.
+	  If they need other modules, they must depend on the corresponding
+	  <code class="literal">python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>-foo</code> packages, and
+	  must not depend on any <code class="literal">python-foo</code>.
+	</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="provides"></a>2.5. Provides</h2></div></div></div><p>
+          Provides in packages of the form
+          <code class="literal">python-<em class="replaceable"><code>foo</code></em></code> must be specified,
+          if the package contains an extension for more than one
+          python version. Provides should also be added on request of
+          maintainers who depend on a non-default python version.
+	</p><p>
+	  Packaged modules available for one particular version of Python must
+	  depend on the corresponding
+	  <code class="literal">python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em></code> package instead.
+	  If they need other modules, they must depend on the corresponding
+	  <code class="literal">python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>-foo</code> packages, and
+	  must not depend on any <code class="literal">python-foo</code>.
+	</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="bytecompilation"></a>2.6. Modules Bytecompilation</h2></div></div></div><p>
+	  If a package provides any binary-independent modules
+	  (<code class="filename">foo.py</code> files), the corresponding bytecompiled
+	  modules (<code class="filename">foo.pyc</code> files) and optimized modules
+	  (<code class="filename">foo.pyo</code> files) must not ship in the
+	  package. Instead, they should be generated in the package's
+	  postinst, and removed in the package's prerm. The package's
+	  prerm has to make sure that both <code class="filename">foo.pyc</code> and
+	  <code class="filename">foo.pyo</code> are removed.
+	</p><p>
+          A package should only byte-compile the files which belong to
+          the package.
+	</p><p>
+          The file <code class="filename">/etc/python/debian_config</code> allows
+          configuration how modules should be byte-compiled. The
+          postinst scripts should respect these settings.
+	</p><p>
+          Modules in private installation directories and in
+          <code class="filename">/usr/lib/site-python</code> should be byte-compiled,
+          when the default python version changes.
+	</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="python.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="programs.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. Python Packaging </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. Python Programs</td></tr></table></div></body></html>

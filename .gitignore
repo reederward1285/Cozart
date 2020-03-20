@@ -3,7 +3,6 @@ qemu/
 *.db
 bin/
 *.tmp
-mnt/
 *.bzImage
 *.vmlinux
 vmlinux

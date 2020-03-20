@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 1. Python Packaging</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.1" /><link rel="home" href="index.html" title="Debian Python Policy" /><link rel="up" href="index.html" title="Debian Python Policy" /><link rel="prev" href="index.html" title="Debian Python Policy" /><link rel="next" href="module_packages.html" title="Chapter 2. Packaged Modules" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 1. Python Packaging</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="module_packages.html">Next</a></td></tr></table><hr /></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="python"></a>Chapter 1. Python Packaging</h1></div></div></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="python.html#versions">1.1. Versions</a></span></dt><dt><span class="section"><a href="python.html#base">1.2. Main package</a></span></dt><dt><span class="section"><a href="python.html#interpreter">1.3. Python Interpreter</a></span></dt><dd><dl><dt><span class="section"><a href="python.html#interpreter_name">1.3.1. Interpreter Name</a></span></dt><dt><span class="section"><a href="python.html#interpreter_loc">1.3.2. Interpreter Location</a></span></dt></dl></dd><dt><span class="section"><a href="python.html#paths">1.4. Module Path</a></span></dt><dt><span class="section"><a href="python.html#docs">1.5. Documentation</a></span></dt></dl></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="versions"></a>1.1. Versions</h2></div></div></div><p>
+	  At any given time, the package <code class="literal">python</code> will
+	  represent the current default Debian Python version.
+	</p><p>
+	  The default Debian Python version should alway be the latest stable
+	  upstream release that can be integrated in the distribution.
+	</p><p>
+	  Apart from the default version, legacy versions of Python
+	  or beta versions of future releases
+	  may be included as well in the distribution, as long as they
+	  are needed by other packages, or as long as it seems
+	  reasonable to provide them.  (Note: For the scope of this
+	  document, Python versions are synonymous to feature
+	  releases, i.e. Python 2.0 and 2.0.1 are subminor versions of
+	  the same Python version 2.0, but Python 2.1 and 2.2 are
+	  indeed different versions.)
+	</p><p>
+	  For any version, the main package must be called
+	  <code class="literal">python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em></code>.
+	</p><p>
+	  The set of currently supported python versions can be found
+	  in <code class="filename">/usr/share/python/debian_defaults</code>.
+	</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="base"></a>1.2. Main package</h2></div></div></div><p>
+	  For every Python version provided in the distribution, the
+	  package <code class="literal">python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em></code>
+	  shall comprise a complete distribution for
+	  <span class="emphasis"><em>deployment</em></span> of Python scripts and applications. The
+	  package includes the binary
+	  <code class="filename">/usr/bin/python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em></code> and
+	  all modules of the upstream Python distribution.
+	</p><p>
+	  Excluded are any modules that depend on
+	  non-<span class="emphasis"><em>required</em></span> packages, they will be provided in
+	  separate packages.  Some tools and files for the
+	  <span class="emphasis"><em>development</em></span> of Python modules are split off in a
+	  separate package
+	  <code class="literal">python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>-dev</code>.
+	  Documentation will be provided separately as well.
+	</p><p>
+	  At any time, the <code class="literal">python</code> package must contain
+	  a symlink <code class="filename">/usr/bin/python</code> to the the appropriate binary
+	  <code class="filename">/usr/bin/python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em></code>. The
+	  <code class="literal">python</code> package must also depend on the
+	  appropriate <code class="literal">python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em></code>
+	  to ensure this binary is installed. The version of the
+	  <code class="literal">python</code> package must be greater than or equal to
+	  <em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em> and smaller than <em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y+1</code></em>.
+	</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="interpreter"></a>1.3. Python Interpreter</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="python.html#interpreter_name">1.3.1. Interpreter Name</a></span></dt><dt><span class="section"><a href="python.html#interpreter_loc">1.3.2. Interpreter Location</a></span></dt></dl></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="interpreter_name"></a>1.3.1. Interpreter Name</h3></div></div></div><p>
+	    Python scripts depending on the default Python version (see <a class="xref" href="python.html#base" title="1.2. Main package">Section 1.2, “Main package”</a>) or not depending on a specific Python version should
+	    use <code class="filename">python</code> (unversioned) as the interpreter name.
+	    </p><p>
+	    Python scripts that only work with a specific Python version must
+	    explicitly use the versioned interpreter name
+	    (<code class="filename">python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em></code>).
+          </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="interpreter_loc"></a>1.3.2. Interpreter Location</h3></div></div></div><p>
+	    The preferred specification for the Python interpreter is
+            <code class="filename">/usr/bin/python</code> or
+            <code class="filename">/usr/bin/python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em></code>.
+	    This ensures that a Debian installation of python is used
+	    and all dependencies on additional python modules are met.
+          </p><p>
+	    If a maintainer would like to provide the user with the
+	    possibility to override the Debian Python interpreter, he
+	    may want to use <code class="filename">/usr/bin/env python</code> or
+	    <code class="filename">/usr/bin/env python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em></code>.
+	    However this is not advisable as it bypasses Debian's dependency
+	    checking and makes the package vulnerable to incomplete local
+	    installations of python.
+	  </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="paths"></a>1.4. Module Path</h2></div></div></div><p>
+	  The module search path for Debian has been amended to
+	  include a directory tree in /usr/local at the beginning of
+	  the path. By default, sys.path is searched in the following
+	  order:
+	  </p><pre class="programlisting">
+/usr/lib/python<em class="replaceable"><code>XY</code></em>.zip
+/usr/lib/python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>
+/usr/lib/python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>/plat-linux2
+/usr/lib/python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>/lib-tk
+/usr/lib/python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>/lib-dynload
+/usr/local/lib/python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>/site-packages
+/usr/lib/python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>/site-packages
+/var/lib/python-support/python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>
+/usr/lib/python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>/site-packages/<em class="replaceable"><code>module-dir</code></em>
+/usr/lib/site-python
+	  </pre><p>
+	</p><p>
+	  The use of the <code class="filename">/usr/lib/site-python</code> directory
+	  is deprecated. The directory may be dropped from the path in
+	  a future version.  The /usr/lib/python<em class="replaceable"><code>XY</code></em>.zip
+	  archive appeared in python2.3; it is not currently used in
+	  Debian.  Modules should not install directly to the
+	  <code class="filename">/var/lib/python-support</code> directory; it is for
+	  use by <a class="xref" href="packaging_tools.html#pysupport" title="B.1. python-support">Section B.1, “python-support”</a>.
+	</p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="docs"></a>1.5. Documentation</h2></div></div></div><p>
+	  Python documentation is split out in separate packages
+	  <code class="literal">python<em class="replaceable"><code>X</code></em>.<em class="replaceable"><code>Y</code></em>-doc</code>. The package
+	  <code class="literal">python-doc</code> will always provide the documentation
+	  for the default Debian Python version.
+	</p><p>
+	  TODO: Policy for documentation of third party packages.
+	</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="module_packages.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Debian Python Policy </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2. Packaged Modules</td></tr></table></div></body></html>

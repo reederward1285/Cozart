@@ -1,0 +1,6 @@
+55565a6eb3393a25a9d09a331689ef00  lib/systemd/system/networkd-dispatcher.service
+ffd92e6fd2cb9d86717b02a0aa037578  usr/bin/networkd-dispatcher
+8a8acf0df11e9d95e5a6f03492f01819  usr/share/doc/networkd-dispatcher/README.md.gz
+05e7c90b4e95e9ea64cb50a4852bc8db  usr/share/doc/networkd-dispatcher/changelog.Debian.gz
+ceb75f0e31bc9ce980bcd61b4b29c288  usr/share/doc/networkd-dispatcher/copyright
+dc145e652fe0faa98d3b87c0274383f4  usr/share/man/man8/networkd-dispatcher.8.gz
